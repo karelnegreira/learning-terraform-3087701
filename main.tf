@@ -38,30 +38,30 @@ resource "aws_security_group" "blog" {
 
 resource "aws_security_group_rule" "blog_http_in" {
   type        = "ingress"
-  form_port   = 80
+  from_port   = 80
   to_port     = 80
   protocol    = "tcp"
-  cird_blocks = ["0.0.0.0/0"]
+  cidr_blocks = ["0.0.0.0/0"]
 
   security_group_id = aws_security_group.blog.id
 }
 
 resource "aws_security_group_rule" "blog_https_in" {
   type        = "ingress"
-  form_port   = 443
+  from_port   = 443
   to_port     = 443
   protocol    = "tcp"
-  cird_blocks = ["0.0.0.0/0"]
+  cidr_blocks = ["0.0.0.0/0"]
 
   security_group_id = aws_security_group.blog.id
 }
 
 resource "aws_security_group_rule" "blog_all_out" {
   type        = "egress"
-  form_port   = 0
+  from_port   = 0
   to_port     = 0
   protocol    = "-1"
-  cird_blocks = ["0.0.0.0/0"]
+  cidr_blocks = ["0.0.0.0/0"]
 
   security_group_id = aws_security_group.blog.id
 }
