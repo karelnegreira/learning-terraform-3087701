@@ -101,8 +101,6 @@ launch_template_name = "blog"
 min_size = 1
 max_size = 2
 
-
-launch_template_name = "blog"
 security_groups      = [module.blog_sg.security_group_name]
 instance_type        = var.instance_type
 
