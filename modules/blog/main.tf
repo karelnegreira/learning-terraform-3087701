@@ -36,9 +36,9 @@ module "blog_vpc" {
 module "blog_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.3.1"
-  name    = "blog_new"
-
   vpc_id = module.blog_vpc.vpc_id
+
+  name    = "${var.environment.name}.blog"
 
   ingress_rules       = ["http-80-tcp", "https-443-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/0"]
@@ -48,10 +48,10 @@ module "blog_sg" {
 }
 
 
-module "blog-alb" {
+module "blog_alb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name    = "blog-alb"
+  name    = "${var.environment.name}.blog_alb"
   vpc_id  = module.blog_vpc.vpc_id
   subnets = module.blog_vpc.public_subnets
 
@@ -73,7 +73,7 @@ module "blog-alb" {
 }
 
 resource "aws_lb_target_group" "blog" {
-  name     = "blog"
+  name     = "${var.environment.name}.blog"
   port     = 80
   protocol = "HTTP"
   vpc_id   = module.blog_vpc.vpc_id
@@ -83,11 +83,11 @@ module "blog_autoscaling" {
 source  = "terraform-aws-modules/autoscaling/aws"
 version = "9.2.0"
 
-name = "blog"
+name = "${var.environment.name}.blog"
 
 vpc_zone_identifier = module.blog_vpc.public_subnets
 
-launch_template_name = "blog"
+launch_template_name = "${var.environment.name}.blog"
 
 min_size = var.min_size
 max_size = var.max_size
@@ -98,7 +98,7 @@ instance_type        = var.instance_type
 image_id             = data.aws_ami.app_ami.id
 
 traffic_source_attachments = {
-  blog-alb = {
+  "${var.environment.name}-blog-alb" = {
     traffic_source_identifier = aws_lb_target_group.blog.arn
   }
 }
