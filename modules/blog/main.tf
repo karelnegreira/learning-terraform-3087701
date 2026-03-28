@@ -51,7 +51,7 @@ module "blog_sg" {
 module "blog_alb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name    = "${var.environment.name}-blog_alb"
+  name    = "${var.environment.name}-blog-alb"
   vpc_id  = module.blog_vpc.vpc_id
   subnets = module.blog_vpc.public_subnets
 
